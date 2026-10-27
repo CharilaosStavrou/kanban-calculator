@@ -1,17 +1,20 @@
 import PartRow from './PartRow.jsx';
 import { calculatedColumns, editableColumns } from './partColumns.js';
 
-export default function PartsTable({ parts, onPartChange, onAddPart, onDeletePart }) {
+export default function PartsTable({ parts, selectedPartId, onSelectPart, onPartChange, onAddPart, onDeletePart }) {
   return (
     <section className="panel">
       <div className="panel-header">
-        <h2>Parts</h2>
+        <div>
+          <h2>Parts</h2>
+          <p className="panel-caption">Click a row to simulate that part.</p>
+        </div>
         <button type="button" className="button" onClick={onAddPart}>
           + Add part
         </button>
       </div>
       <div className="table-wrapper">
-        <table className="parts-table">
+        <table className="parts-table" aria-label="Parts">
           <thead>
             <tr>
               <th>Part</th>
@@ -38,7 +41,14 @@ export default function PartsTable({ parts, onPartChange, onAddPart, onDeletePar
           </thead>
           <tbody>
             {parts.map((part) => (
-              <PartRow key={part.id} part={part} onChange={onPartChange} onDelete={onDeletePart} />
+              <PartRow
+                key={part.id}
+                part={part}
+                isSelected={part.id === selectedPartId}
+                onSelect={onSelectPart}
+                onChange={onPartChange}
+                onDelete={onDeletePart}
+              />
             ))}
           </tbody>
         </table>

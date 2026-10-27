@@ -5,11 +5,17 @@ import { calculatePartMetrics } from '../lib/kanbanCalculations.js';
 import { formatNumber } from '../lib/format.js';
 import { partFieldRules } from '../lib/validation.js';
 
-export default function PartRow({ part, onChange, onDelete }) {
+export default function PartRow({ part, isSelected, onSelect, onChange, onDelete }) {
   const metrics = calculatePartMetrics(part);
 
+  // Clicking or tabbing into any cell selects the part for the simulation.
   return (
-    <tr>
+    <tr
+      className={isSelected ? 'row-selected' : ''}
+      aria-selected={isSelected}
+      onClick={() => onSelect(part.id)}
+      onFocus={() => onSelect(part.id)}
+    >
       <td>
         <input
           type="text"
