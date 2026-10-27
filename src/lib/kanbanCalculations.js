@@ -21,10 +21,12 @@ export const excessCardMargin = 2;
 
 // Recommended cards = (demand per day × lead time × (1 + safety factor / 100)) ÷ container size,
 // rounded up: enough containers to cover demand during replenishment plus a safety margin.
+// At least 1 whenever demand is above 0, because a kanban loop always needs one container.
 export function calculateRecommendedCards(part) {
   const { demandPerDay, replenishmentLeadTime, safetyFactor, containerSize } = part;
+  if (demandPerDay <= 0) return 0;
   const rawCards = (demandPerDay * replenishmentLeadTime * (1 + safetyFactor / 100)) / containerSize;
-  return Math.max(0, Math.ceil(rawCards - roundingTolerance));
+  return Math.max(1, Math.ceil(rawCards - roundingTolerance));
 }
 
 // Maximum inventory (units) = cards used × container size: every card attached to a full container.

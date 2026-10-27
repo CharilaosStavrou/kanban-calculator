@@ -25,8 +25,12 @@ describe('calculateRecommendedCards', () => {
     expect(calculateRecommendedCards({ ...bolts, demandPerDay: 100, safetyFactor: 10, containerSize: 110 })).toBe(1);
   });
 
-  it('recommends zero cards when the lead time is zero', () => {
-    expect(calculateRecommendedCards({ ...bolts, replenishmentLeadTime: 0 })).toBe(0);
+  it('recommends at least one card when the lead time is zero', () => {
+    expect(calculateRecommendedCards({ ...bolts, replenishmentLeadTime: 0 })).toBe(1);
+  });
+
+  it('recommends zero cards only when there is no demand', () => {
+    expect(calculateRecommendedCards({ ...bolts, demandPerDay: 0 })).toBe(0);
   });
 
   it('recommends one card when a single container covers the lead time', () => {
