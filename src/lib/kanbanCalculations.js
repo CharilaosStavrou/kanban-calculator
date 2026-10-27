@@ -39,11 +39,12 @@ export function calculateMaxInventoryDays(part) {
   return calculateMaxInventoryUnits(part) / part.demandPerDay;
 }
 
-// Average expected inventory (units) ≈ maximum inventory − (demand per day × lead time) ÷ 2,
-// never below 0. Approximation: on average half of the lead-time demand is out for replenishment.
+// Average expected inventory (units) ≈ cards used × container size − demand per day × lead time
+// − container size ÷ 2, never below 0. Approximation: in steady state the full lead-time demand is
+// in the replenishment pipeline (Little's Law) and the container being consumed is on average half full.
 export function calculateAverageInventory(part) {
-  const pipelineHalf = (part.demandPerDay * part.replenishmentLeadTime) / 2;
-  return Math.max(0, calculateMaxInventoryUnits(part) - pipelineHalf);
+  const pipelineInventory = part.demandPerDay * part.replenishmentLeadTime;
+  return Math.max(0, calculateMaxInventoryUnits(part) - pipelineInventory - part.containerSize / 2);
 }
 
 // Status: too few if cards used < recommended, excess if cards used > recommended + 2, otherwise OK.

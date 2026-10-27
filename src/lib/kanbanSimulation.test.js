@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { sampleProject } from '../data/sampleData.js';
-import { calculateRecommendedCards } from './kanbanCalculations.js';
+import { calculateAverageInventory, calculateRecommendedCards } from './kanbanCalculations.js';
 import {
   createSeededRandom,
   findStockoutPeriods,
@@ -112,6 +112,25 @@ describe('simulateSupermarket', () => {
     const first = simulateSupermarket(brackets, settings, 5);
     expect(simulateSupermarket(brackets, settings, 5)).toEqual(first);
     expect(simulateSupermarket(brackets, settings, 6).totalDemand).not.toBe(first.totalDemand);
+  });
+});
+
+describe('average inventory formula vs simulation', () => {
+  // Steady-state simulated average: long run, zero variability, first two lead times skipped as warm-up.
+  function steadyStateAverage(part) {
+    const result = simulateSupermarket(part, { ...settings, simulationDays: 200 });
+    const warmUpHours = Math.max(2 * result.leadTimeHours, settings.workingHoursPerDay);
+    const steadyState = result.inventory.slice(1 + warmUpHours);
+    return steadyState.reduce((sum, value) => sum + value, 0) / steadyState.length;
+  }
+
+  it('agrees within half an hour of demand when there are no stockouts', () => {
+    for (const part of parts) {
+      const loop = withRecommendedCards({ ...part, demandVariability: 0 });
+      const halfHourDemand = part.demandPerDay / settings.workingHoursPerDay / 2;
+      const difference = Math.abs(steadyStateAverage(loop) - calculateAverageInventory(loop));
+      expect(difference).toBeLessThanOrEqual(halfHourDemand + 1e-6);
+    }
   });
 });
 

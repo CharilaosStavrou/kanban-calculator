@@ -65,20 +65,19 @@ describe('calculateMaxInventoryDays', () => {
 });
 
 describe('calculateAverageInventory', () => {
-  it('subtracts half of the lead-time demand from maximum inventory', () => {
-    expect(calculateAverageInventory(bolts)).toBe(300); // 500 − 400 × 1 / 2
-    expect(calculateAverageInventory(brackets)).toBe(140); // 320 − 120 × 3 / 2
-    expect(calculateAverageInventory(gaskets)).toBe(550); // 800 − 250 × 2 / 2
-    expect(calculateAverageInventory(housings)).toBe(90); // 150 − 30 × 4 / 2
-  });
-
-  it('equals maximum inventory when the lead time is zero', () => {
-    expect(calculateAverageInventory({ ...bolts, replenishmentLeadTime: 0 })).toBe(500);
+  it('subtracts lead-time demand and half a container from maximum inventory', () => {
+    expect(calculateAverageInventory(bolts)).toBe(50); // 500 − 400 × 1 − 100 / 2
+    expect(calculateAverageInventory(gaskets)).toBe(275); // 800 − 250 × 2 − 50 / 2
+    expect(calculateAverageInventory(housings)).toBe(27); // 150 − 30 × 4 − 6 / 2
   });
 
   it('never goes below zero', () => {
-    expect(calculateAverageInventory({ ...bolts, kanbanCards: 1 })).toBe(0); // 100 − 200 < 0
+    expect(calculateAverageInventory(brackets)).toBe(0); // 320 − 120 × 3 − 20 / 2 < 0
     expect(calculateAverageInventory({ ...bolts, kanbanCards: 0 })).toBe(0);
+  });
+
+  it('only subtracts half a container when the lead time is zero', () => {
+    expect(calculateAverageInventory({ ...bolts, replenishmentLeadTime: 0 })).toBe(450); // 500 − 50
   });
 });
 
@@ -112,7 +111,7 @@ describe('calculatePartMetrics', () => {
       recommendedCards: 5,
       maxInventoryUnits: 500,
       maxInventoryDays: 1.25,
-      averageInventory: 300,
+      averageInventory: 50,
       status: partStatus.ok,
     });
   });

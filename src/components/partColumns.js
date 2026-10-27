@@ -19,7 +19,8 @@ export const calculatedColumns = [
     unit: 'units',
     fractionDigits: 0,
     tooltip:
-      'Approximation: max inventory − (demand per day × lead time) ÷ 2, never below 0. ' +
-      'Assumes on average half of the lead-time demand is out for replenishment.',
+      'Approximation: cards used × container size − demand per day × lead time − container size ÷ 2, ' +
+      'never below 0. In steady state the full lead-time demand is in the replenishment pipeline ' +
+      "(Little's Law) and the container being consumed is on average half full.",
   },
 ];
