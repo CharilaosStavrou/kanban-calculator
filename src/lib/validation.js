@@ -23,13 +23,18 @@ export function parseNumber(text) {
   return numberPattern.test(normalized) ? Number(normalized) : NaN;
 }
 
+// Returns an error message for a number that breaks the rule, or null if it is valid.
+export function checkNumber(value, rule) {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return 'Enter a number';
+  if (value < 0) return 'Cannot be negative';
+  if (rule.integer && !Number.isInteger(value)) return 'Must be a whole number';
+  if (rule.min !== undefined && value < rule.min) return `Must be at least ${rule.min}`;
+  if (rule.max !== undefined && value > rule.max) return `Must be at most ${rule.max}`;
+  return null;
+}
+
 // Returns { value, error }. `error` is null when the text is valid for the rule.
 export function validateNumber(text, rule) {
   const value = parseNumber(text);
-  if (Number.isNaN(value)) return { value, error: 'Enter a number' };
-  if (value < 0) return { value, error: 'Cannot be negative' };
-  if (rule.integer && !Number.isInteger(value)) return { value, error: 'Must be a whole number' };
-  if (rule.min !== undefined && value < rule.min) return { value, error: `Must be at least ${rule.min}` };
-  if (rule.max !== undefined && value > rule.max) return { value, error: `Must be at most ${rule.max}` };
-  return { value, error: null };
+  return { value, error: checkNumber(value, rule) };
 }

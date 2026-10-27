@@ -429,3 +429,33 @@ input.input-invalid:focus {
   font-size: 11px;
   color: var(--color-muted);
 }
+
+/* Project toolbar and messages */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.error-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 10px 12px;
+  margin-bottom: 24px;
+  border: 1px solid var(--color-danger);
+  border-radius: 6px;
+  background: var(--color-danger-background);
+  color: var(--color-danger);
+}
