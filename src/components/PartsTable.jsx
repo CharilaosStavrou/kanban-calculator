@@ -1,5 +1,5 @@
 import PartRow from './PartRow.jsx';
-import { editableColumns } from './partColumns.js';
+import { calculatedColumns, editableColumns } from './partColumns.js';
 
 export default function PartsTable({ parts, onPartChange, onAddPart, onDeletePart }) {
   return (
@@ -21,6 +21,18 @@ export default function PartsTable({ parts, onPartChange, onAddPart, onDeletePar
                   <span className="unit">{column.unit}</span>
                 </th>
               ))}
+              {calculatedColumns.map((column, index) => (
+                <th
+                  key={column.key}
+                  className={`calculated-cell${index === 0 ? ' group-start' : ''}`}
+                  title={column.tooltip}
+                >
+                  {column.label}
+                  {column.tooltip && <span className="info-marker" aria-hidden="true"> ⓘ</span>}
+                  <span className="unit">{column.unit}</span>
+                </th>
+              ))}
+              <th>Status</th>
               <th aria-label="Actions" />
             </tr>
           </thead>

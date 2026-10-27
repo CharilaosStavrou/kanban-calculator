@@ -1,8 +1,13 @@
 import NumericInput from './NumericInput.jsx';
-import { editableColumns } from './partColumns.js';
+import StatusBadge from './StatusBadge.jsx';
+import { calculatedColumns, editableColumns } from './partColumns.js';
+import { calculatePartMetrics } from '../lib/kanbanCalculations.js';
+import { formatNumber } from '../lib/format.js';
 import { partFieldRules } from '../lib/validation.js';
 
 export default function PartRow({ part, onChange, onDelete }) {
+  const metrics = calculatePartMetrics(part);
+
   return (
     <tr>
       <td>
@@ -24,6 +29,14 @@ export default function PartRow({ part, onChange, onDelete }) {
           />
         </td>
       ))}
+      {calculatedColumns.map((column, index) => (
+        <td key={column.key} className={`calculated-cell${index === 0 ? ' group-start' : ''}`}>
+          {formatNumber(metrics[column.key], column.fractionDigits)}
+        </td>
+      ))}
+      <td>
+        <StatusBadge status={metrics.status} />
+      </td>
       <td>
         <button
           type="button"

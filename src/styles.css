@@ -8,6 +8,11 @@
   --color-ok: #2e7d32;
   --color-warning: #e67e22;
   --color-danger: #c62828;
+  --color-ok-background: #e8f5e9;
+  --color-warning-background: #fff3e0;
+  --color-warning-text: #a04f00;
+  --color-danger-background: #ffebee;
+  --color-calculated-background: #f6f8fa;
   --font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
@@ -24,7 +29,7 @@ body {
 }
 
 .app {
-  max-width: 1200px;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 24px;
 }
@@ -165,7 +170,7 @@ input.input-invalid:focus {
 
 .parts-table th,
 .parts-table td {
-  padding: 6px 8px;
+  padding: 6px;
   text-align: left;
   vertical-align: top;
   border-bottom: 1px solid var(--color-border);
@@ -184,16 +189,66 @@ input.input-invalid:focus {
 }
 
 .parts-table .numeric-input input {
-  width: 80px;
+  width: 60px;
   text-align: right;
 }
 
 .parts-table .name-input {
-  width: 160px;
+  width: 152px;
 }
 
 .empty-state {
   color: var(--color-muted);
   text-align: center;
   padding: 16px;
+}
+
+.parts-table .calculated-cell {
+  text-align: right;
+  background: var(--color-calculated-background);
+  white-space: nowrap;
+}
+
+.parts-table td.calculated-cell {
+  padding-top: 11px;
+}
+
+.parts-table .group-start {
+  border-left: 1px solid var(--color-border);
+}
+
+.parts-table th[title] {
+  cursor: help;
+}
+
+.info-marker {
+  color: var(--color-accent);
+}
+
+/* Status badges: text label first, color as reinforcement */
+.status-badge {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 8px;
+  border: 1px solid;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.status-ok {
+  color: var(--color-ok);
+  background: var(--color-ok-background);
+}
+
+.status-excess {
+  color: var(--color-warning-text);
+  border-color: var(--color-warning);
+  background: var(--color-warning-background);
+}
+
+.status-tooFew {
+  color: var(--color-danger);
+  background: var(--color-danger-background);
 }
